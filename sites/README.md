@@ -22,6 +22,28 @@
 
 完成資料確認後，可將 `preview` 設為 `false`，並移除 `dist/index.html` 的 `robots=noindex, nofollow`。此設定不會變更 Sites 的私密／公開權限；供外部訪客使用還需要公開的部署與網址。
 
+## Vercel
+
+網站首頁位於 `sites/dist/index.html`，儲存庫根目錄沒有 `index.html`。若直接發布儲存庫根目錄，首頁 `/` 會回傳 `404 NOT_FOUND`。
+
+儲存庫根目錄的 `vercel.json` 已指定發布 `sites/dist`，並略過安裝套件與建置。從 GitHub 匯入或調整既有 Vercel 專案時，在 **Settings → Build and Deployment** 使用以下設定：
+
+| 設定 | 值 |
+| --- | --- |
+| Root Directory | 留空，使用儲存庫根目錄 |
+| Framework Preset | `Other` |
+| Build Command | 留空；若手動設定，開啟 Override 並清空欄位 |
+| Output Directory | `sites/dist` |
+| Install Command | 留空；若手動設定，開啟 Override 並清空欄位 |
+
+`vercel.json` 會覆寫 Framework、Build Command、Output Directory 與 Install Command；Root Directory 仍需在後台確認為儲存庫根目錄，才能讀取這份設定。
+
+將設定檔提交並推送至 Vercel 連結的 Git 分支，確認新部署使用包含此檔案的 commit。若只調整後台設定，儲存後需重新部署才會生效。完成後，從最新部署的 **Visit** 開啟網站；舊部署的專屬網址不會因新部署而更新。
+
+此網站使用 `#about`、`#products` 等頁內錨點，無須新增 SPA 路由重寫。可確認首頁 `/`、`/styles.css`、`/site-config.js`、`/app.js` 與 `/favicon.svg` 都能正常存取。GitHub Pages 的 workflow 與 `.openai/hosting.json` 分別用於 GitHub Pages 和 Sites，不會替 Vercel 設定發布目錄。
+
+參考：[Vercel 建置與發布目錄設定](https://vercel.com/docs/builds/configure-a-build)、[vercel.json 設定](https://vercel.com/docs/project-configuration/vercel-json)。
+
 ## GitHub Pages
 
 將 `dist/` 內的檔案完整放至 GitHub Pages 發布目錄，保持相對路徑，即可用於帳號網站或專案子路徑。若需公司自有網域，另外依 GitHub Pages 設定網域與 DNS。這份靜態網站不含公司帳號或商店驗證狀態，不能保證通過 Apple 組織驗證。
