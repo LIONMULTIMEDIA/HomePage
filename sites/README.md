@@ -20,7 +20,7 @@
 
 在 `dist/site-config.js` 設定真實的 `email`、`phone`、`address`、`taxId`。目前信箱為 `Ap.Developers@goldenf.co`。未提供的信箱顯示「尚未提供」；其他未提供的欄位不顯示。提供有效 Email 後，聯絡按鈕會使用 mailto 開啟使用者的郵件程式。
 
-完成資料確認後，可將 `preview` 設為 `false`，並移除 `dist/index.html` 的 `robots=noindex, nofollow`。此設定不會變更 Sites 的私密／公開權限；供外部訪客使用還需要公開的部署與網址。
+頁首已移除預覽提示列。完成資料確認後，如需開放搜尋引擎索引，可移除 `dist/index.html` 的 `robots=noindex, nofollow`。此設定不會變更 Sites 的私密／公開權限；供外部訪客使用還需要公開的部署與網址。
 
 ## Vercel
 
@@ -47,6 +47,14 @@
 ## GitHub Pages
 
 將 `dist/` 內的檔案完整放至 GitHub Pages 發布目錄，保持相對路徑，即可用於帳號網站或專案子路徑。若需公司自有網域，另外依 GitHub Pages 設定網域與 DNS。這份靜態網站不含公司帳號或商店驗證狀態，不能保證通過 Apple 組織驗證。
+
+## SSH 主機部署
+
+2026-10-30 已部署至 [http://10.40.2.225:18080](http://10.40.2.225:18080)。此位址需要能連入 `10.40.2.225` 所在的內網或 VPN。網站使用獨立的 `lion-site.service`，監聽 `18080/tcp`，並已設定開機自動啟動。
+
+正式網址為 [https://lion-star.vip](https://lion-star.vip)。GoDaddy 的 `A / @` 紀錄已指向 `185.213.248.225`；BO 的既有 Nginx 依網域分流，將 HTTPS 請求轉送至 `127.0.0.1:18080`，HTTP 自動轉址至 HTTPS。Let's Encrypt 憑證與自動續期演練均完成，既有 BO 服務正常。完整設定、維護方式與驗證紀錄見 [部署說明](../deploy/README.md)。
+
+2026-11-02 已將移除頁首預覽提示列的版本部署至正式機。正式 HTTPS 首頁、全部靜態資源與健康檢查皆通過，服務維持運作，舊版本已保留供回復。
 
 ## Sites
 

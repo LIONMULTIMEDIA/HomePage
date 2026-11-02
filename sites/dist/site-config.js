@@ -4,6 +4,4 @@ window.LION_SITE_CONFIG = Object.freeze({
   phone: "",
   address: "",
   taxId: "",
-  // 正式對外發布且資料齊全後設為 false，並移除 index.html 的 noindex。
-  preview: true,
 });

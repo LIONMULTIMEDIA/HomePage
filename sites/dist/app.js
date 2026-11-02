@@ -43,8 +43,6 @@
       document.getElementById(`company-${fieldName}-row`).hidden = false;
     }
   }
-  document.getElementById("preview-note").hidden = config.preview === false;
-  if (email) document.querySelector(".preview-note-detail").textContent = "公司形象網站";
   document.getElementById("year").textContent = String(new Date().getFullYear());
 
   if ("IntersectionObserver" in window) {

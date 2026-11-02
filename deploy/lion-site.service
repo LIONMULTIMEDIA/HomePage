@@ -1,0 +1,36 @@
+[Unit]
+Description=LION static website on port 18080
+After=network.target
+
+[Service]
+Type=simple
+DynamicUser=yes
+User=lion-site
+RuntimeDirectory=lion-site
+RuntimeDirectoryMode=0750
+LogsDirectory=lion-site
+LogsDirectoryMode=0750
+ExecStartPre=/usr/sbin/nginx -t -p /srv/lion/ -c /etc/lion/nginx.conf
+ExecStart=/usr/sbin/nginx -p /srv/lion/ -c /etc/lion/nginx.conf -g "daemon off;"
+ExecReload=/bin/kill -s HUP $MAINPID
+KillSignal=SIGQUIT
+KillMode=mixed
+TimeoutStopSec=15
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectSystem=strict
+ProtectHome=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+CapabilityBoundingSet=
+MemoryMax=128M
+TasksMax=32
+UMask=0027
+
+[Install]
+WantedBy=multi-user.target
