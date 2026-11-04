@@ -2,7 +2,7 @@
 
 網站正式網址為 [https://lion-star.vip](https://lion-star.vip)，HTTP 會自動轉址至 HTTPS。內網直接連線位址為 [http://10.40.2.225:18080](http://10.40.2.225:18080)，健康檢查為 `/healthz`。部署與 HTTPS 設定於 2026-10-30 完成。
 
-目前發布內容為 `sites/dist` 的五個靜態檔案，版本目錄為 `20261102T024403Z-remove-preview-c2f05131`。2026-11-02 已移除頁首「網站預覽版｜公司形象網站」提示列及相關程式、樣式與設定，保留既有 `noindex, nofollow` 設定。此次部署使用基於 commit `3ddbac934a4e6b795938dc55bfff284f6a2d4a37` 的工作目錄修改，實際內容以部署紀錄中的 `SHA256SUMS` 為準。
+目前發布內容為 `sites/dist` 的五個靜態檔案，版本目錄為 `20261104T051040Z-web-game-tags-f8aa27f`。2026-11-04 已在網頁遊戲卡片的「數位內容」標籤後，依序加入「高登棋牌」與「高登老虎機」。此次部署的靜態檔案與 commit `f8aa27f7b8bbb160b0e6330e0a128ced3808daef` 完全一致，檔案雜湊記錄於部署目錄中的 `SHA256SUMS`。
 
 ## 服務配置
 
@@ -11,12 +11,12 @@
 | 服務 | `lion-site.service`，已啟用開機自動啟動 |
 | HTTP 監聽 | `0.0.0.0:18080` |
 | 網站根目錄 | `/srv/lion/current`，連結到版本目錄 |
-| 版本目錄 | `/srv/lion/releases/20261102T024403Z-remove-preview-c2f05131` |
+| 版本目錄 | `/srv/lion/releases/20261104T051040Z-web-game-tags-f8aa27f` |
 | Nginx 設定 | `/etc/lion/nginx.conf`，來源為 [nginx.conf](nginx.conf) |
 | systemd 設定 | `/etc/systemd/system/lion-site.service`，來源為 [lion-site.service](lion-site.service) |
 | 日誌 | `/var/log/lion-site/access.log`、`error.log` |
 | 日誌輪替 | `/etc/logrotate.d/lion-site`，來源為 [logrotate.conf](logrotate.conf)，每日輪替並保留 14 份 |
-| 部署驗證紀錄 | `/srv/lion/deployments/20261102T024403Z-remove-preview-c2f05131/` |
+| 部署驗證紀錄 | `/srv/lion/deployments/20261104T051040Z-web-game-tags-f8aa27f/` |
 | 防火牆 | UFW 新增 `18080/tcp` 允許規則，註記為 `LION static website` |
 
 服務使用主機既有的 `/usr/sbin/nginx`，由 systemd 分配獨立的 `lion-site` 動態使用者。LION 有自己的設定、PID、執行目錄與日誌，單一 worker，記憶體上限為 128 MiB。既有 `nginx.service` 的設定與服務均未變更。
@@ -89,13 +89,19 @@ mv -Tf /srv/lion/current.next /srv/lion/current
 curl --fail http://127.0.0.1:18080/
 ```
 
-純靜態檔案更新不需要重啟服務。保留先前版本目錄；需要回復時，使用相同切換步驟將 `lion_release` 指向先前版本。目前可回復至 `20261030T072947Z-3ddbac9`。
+純靜態檔案更新不需要重啟服務。保留先前版本目錄；需要回復時，使用相同切換步驟將 `lion_release` 指向先前版本。目前可回復至 `20261102T024403Z-remove-preview-c2f05131`。
+
+## 2026-11-04 更新驗證
+
+已部署網頁遊戲新增「高登棋牌」與「高登老虎機」標籤的版本。上傳前確認五個靜態檔案與來源 commit 完全一致；上傳後核對 SHA-256，再原子切換 `/srv/lion/current`。原版本保留供回復。
+
+主機內 HTTP、HTTPS 與外部正式 HTTPS 的五個檔案雜湊均一致，首頁及資源回傳 HTTP 200，`/healthz` 回傳 `ok`。公開首頁已確認兩個新增標籤及順序。`lion-site.service` 與 `nginx.service` 持續運作，主程序 PID 未變更，無需重啟服務。本機完整紀錄位於 `.gstack/deploy-reports/20261104T051040Z-web-game-tags-f8aa27f/report.json`。
 
 ## 2026-11-02 更新驗證
 
 新版上傳至獨立版本目錄，五個檔案的 SHA-256、root 擁有者與檔案權限確認後，透過原子切換更新 `/srv/lion/current`。正式 HTTPS 首頁、四個資源檔案與 `/healthz` 均回傳 HTTP 200；所有檔案內容與本機發布快照一致，預覽提示列已移除。
 
-主機內 HTTP 與 HTTPS 內容驗證通過，`lion-site.service` 與 `nginx.service` 維持運作且主程序 PID 未變更，無需重啟服務。舊版本已保留。完整本機紀錄位於 `.gstack/deploy-reports/20261102T024403Z-remove-preview-c2f05131/report.json`，遠端紀錄位於上表所列目錄。
+主機內 HTTP 與 HTTPS 內容驗證通過，`lion-site.service` 與 `nginx.service` 維持運作且主程序 PID 未變更，無需重啟服務。舊版本已保留。完整本機紀錄位於 `.gstack/deploy-reports/20261102T024403Z-remove-preview-c2f05131/report.json`，遠端紀錄位於 `/srv/lion/deployments/20261102T024403Z-remove-preview-c2f05131/`。
 
 ## 部署驗證
 
